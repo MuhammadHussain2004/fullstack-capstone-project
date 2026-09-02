@@ -8,18 +8,31 @@ function MainPage() {
 
     useEffect(() => {
         // Task 1: Write async fetch operation
-        // Write your code below this line
+        const fetchGifts = async () => {
+            try {
+                const response = await fetch(`${urlConfig.backendUrl}/api/gifts`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch gifts');
+                }
+                const data = await response.json();
+                setGifts(data);
+            } catch (error) {
+                console.error('Error fetching gifts:', error);
+            }
+        };
+
+        fetchGifts();
     }, []);
 
     // Task 2: Navigate to details page
     const goToDetailsPage = (productId) => {
-        // Write your code below this line
-
+        navigate(`/app/product/${productId}`);
       };
 
     // Task 3: Format timestamp
     const formatDate = (timestamp) => {
-        // Write your code below this line
+        const date = new Date(timestamp);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       };
 
     const getConditionClass = (condition) => {
@@ -34,20 +47,24 @@ function MainPage() {
                         <div className="card product-card">
 
                             {/* // Task 4: Display gift image or placeholder */}
-                            {/* // Write your code below this line */}
+                            {gift.image ? (
+                                <img src={gift.image} className="card-img-top" alt={gift.name} />
+                            ) : (
+                                <div className="image-placeholder">No Image Available</div>
+                            )}
 
                             <div className="card-body">
 
                                 {/* // Task 5: Display gift image or placeholder */}
-                                {/* // Write your code below this line */}
+                                <h5 className="card-title">{gift.name}</h5>
 
                                 <p className={`card-text ${getConditionClass(gift.condition)}`}>
                                 {gift.condition}
                                 </p>
 
                                 {/* // Task 6: Display gift image or placeholder */}
-                                {/* // Write your code below this line */}
-                                
+                                <p className="card-text date-added">{formatDate(gift.date_added)}</p>
+
 
                                 <button onClick={() => goToDetailsPage(gift.id)} className="btn btn-primary">
                                     View Details
